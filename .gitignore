@@ -1,0 +1,11 @@
+data/*
+cloudEast.key.pub
+cloudEast.key
+
+zzzfrom_addresses.csv
+zzzto_addresses.csv
+
+notes
+notes2
+plotgraphs.py
+question.py
