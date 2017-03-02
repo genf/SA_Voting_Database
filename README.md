@@ -7,7 +7,6 @@ Requirements (may not be a comprehensive list as of yet)
 - python 
 	- pandas/pymongo
 	- json, os, sys, datetime 
-	- 
 - mongodb
 
 
