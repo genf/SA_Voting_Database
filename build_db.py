@@ -47,62 +47,6 @@ def mongo_database_setup():
     return conn, db, collection
 
 
-"""
-imports data into a dataframe of dataframes
-outer level is the user and conversations array
-inner level is a list of conversations in the conversation array for each user
-"""
-def import_data(inbound_list, outbound_list):
-    
-    if len(inbound_list) == len(outbound_list):
-        for ind in range(len(inbound_list)):
-            ## returns dictionary 
-            ## key = from_addr category in inbound
-            ## val = list of dictionaries (messages to/from system, ordered by timestamp)
-            conversations = create_conversations(inbound_list[ind],outbound_list[ind])
-
-    columns = ['content',
-                 'from_addr',
-                 'from_addr_type',
-                 'group',
-                 'helper_metadata',
-                 'in_reply_to',
-                 'message_id',
-                 'message_type',
-                 'message_version',
-                 'provider',
-                 'routing_metadata',
-                 'session_event',
-                 'timestamp',
-                 'to_addr',
-                 'to_addr_type',
-                 'transport_metadata',
-                 'transport_name',
-             'transport_type']
-    ## transforms the values of items in conversations dictionary to be a list of pandas dataframes
-    for k,v in conversations.items():
-        tmp = []
-        for d in v:
-            ##label columns of messages
-            df_conv = pd.DataFrame([d])  #each dictionary is a row in dataframe
-            df_conv.columns = columns
-            tmp.append(df_conv)
-        conversations[k] = tmp
-
-
-    columns = ['user', 'conversation']
-    ##returns a list of top level conversation dataframes (user: conversations array)
-    ## do this because cannot convert dictionaries directly to a dataframe since conversations are list of different length
-    frames = []
-    for val in conversations.items():
-        df = pd.DataFrame(([val]))
-        df.columns = columns
-        frames.append(df)
-
-    ## concatenate 
-    df_outer = pd.concat(frames)
-    return df_outer
-
 
 ## This function takes a pandas dataframe and inserts it into local mogodb
 ## df : pandas dataframe 
